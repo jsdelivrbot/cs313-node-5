@@ -3,7 +3,14 @@ const path = require('path')
 const PORT = process.env.PORT || 5000
 
 //function to calculate the price based on package and weight
-function calculateRates(req, res){
+
+
+express()
+  .use(express.static(path.join(__dirname, 'public')))
+  .set('views', path.join(__dirname, 'views'))
+  .set('view engine', 'ejs')
+  .get('/', (req, res) => res.render('pages/index'))
+  .get('/rates', function calculateRates(req, res){
     var num = parseFloat(req.query.weight);
     var type = req.query.package;
     var price = 0;
@@ -24,12 +31,5 @@ function calculateRates(req, res){
 
     }
     res.render("pages/displayResult");
-}
-
-express()
-  .use(express.static(path.join(__dirname, 'public')))
-  .set('views', path.join(__dirname, 'views'))
-  .set('view engine', 'ejs')
-  .get('/', (req, res) => res.render('pages/index'))
-  .get('/rates', calculateRates(req, res))
+})
   .listen(PORT, () => console.log(`Listening on ${ PORT }`))
